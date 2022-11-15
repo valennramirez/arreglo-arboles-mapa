@@ -504,7 +504,7 @@ int cargarCelda (celda ada[], int dimension);
 
 void arregloArbolesToArchivo (char nombreArchivo[], celda ada[], int validos)
 {
-    FILE *archivo=(nombreArchivo, "wb");
+    FILE *archivo=fopen(nombreArchivo, "wb");
 
     if(archivo!=NULL)
     {
