@@ -438,17 +438,23 @@ int retroceso (int habitacionActual, nodoarbol *mapa)
     }
 
     return habitacionAnterior;
-}
+}*/
 
 ///arreglo de arboles
 
-int bsucarPosHeroe (celda ada[], int validos, char nombre)
+typedef struct
+{
+    int nivel;
+    nodoArbol *mapaArbol;
+} celda;
+
+int buscarPosNivel (celda ada[], int validos, int nivel)
 {
     int i=0, rta=-1;
 
     while(validos>i && rta==-1)
     {
-        if (strcmpi (ada[i].jugador.nombre, nombre)==0)
+        if (ada[i].nivel==nivel)
         {
             rta=i;
         }
@@ -458,31 +464,55 @@ int bsucarPosHeroe (celda ada[], int validos, char nombre)
     return rta;
 }
 
-int alta(celda ada[], int validos, heroe jugador)
+int agregarNivel (celda ada[], int validos, int nivel)
+{
+    ada[validos].nivel=nivel;
+
+    return validos++;
+}
+
+int alta(celda ada[], int validos, int nivel)
 {
     int validos;
 
-    int pos=buscarPosHeroe(ada, validos, jugador.nombre);
+    int pos=buscarPosNivel(ada, validos, nivel);
 
     if(pos==-1)
     {
-        validos=agregarHeroe(ada, validos, jugador);
+        ada[validos].nivel=nivel;
+        validos++;
         pos=validos-1;
     }
 
+    ada[pos].mapaArbol=inicarbol();
     ada[pos].mapaArbol=cargaMapa(ada[pos].mapaArbol);
 
     return validos;
 }
 
-int cargarCelda (celda ada[], int dimension, heroe jugador);
+int cargarCelda (celda ada[], int dimension);
 {
     int validos;
 
     while(dimension>validos)
     {
-        validos=alta(ada, validos, jugador);
+        validos=alta(ada, validos, validos+1);
     }
 
     return validos;
 }*/
+
+void arregloArbolesToArchivo (char nombreArchivo[], celda ada[], int validos)
+{
+    FILE *archivo=(nombreArchivo, "wb");
+
+    if(archivo!=NULL)
+    {
+        for(int i=0; validos>i; i++)
+        {
+            fwrite(&ada[i], sizeof(celda), 1, archivo); ///para que se guarde en orden con el nombre/numero
+        }
+
+        fclose(archivo);
+    }
+}
